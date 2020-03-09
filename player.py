@@ -83,7 +83,7 @@ class Player(DirectObject):
         self.accept("d", self.set_key, ["d", True])
         self.accept("shift", self.set_key, ["shift", True])
         self.accept("control", self.set_key, ["control", True])
-        self.accept("e", self.equipment.equipment_change_visibility)
+        self.accept("e", self.show_hide_equipment)
 
         self.accept("w-up", self.set_key, ["w", False])
         self.accept("s-up", self.set_key, ["s", False])
@@ -91,3 +91,6 @@ class Player(DirectObject):
         self.accept("d-up", self.set_key, ["d", False])
         self.accept("shift-up", self.set_key, ["shift", False])
         self.accept("control-up", self.set_key, ["control", False])
+
+    def show_hide_equipment(self):
+        self.equipment.equipment_change_visibility(self)

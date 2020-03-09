@@ -21,13 +21,15 @@ class Equipment:
 
         self.gui.hide()
 
-    def equipment_change_visibility(self):
+    def equipment_change_visibility(self, player):
         if self.visible:
             self.gui.hide()
             self.master.properties()
+            self.master.taskMgr.add(player.camera_control, "Camera Control")
             self.visible = False
         else:
             self.gui.items = self.items
             self.gui.show()
             self.master.properties_with_mouse()
+            self.master.taskMgr.remove("Camera Control")
             self.visible = True
