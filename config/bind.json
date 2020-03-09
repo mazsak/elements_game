@@ -1,0 +1,10 @@
+{
+  "forward": "w",
+  "backward": "s",
+  "right": "d",
+  "left": "a",
+  "up": "shift",
+  "down": "control",
+  "equipment": "e",
+  "exit": "escape"
+}

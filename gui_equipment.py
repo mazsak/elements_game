@@ -5,7 +5,7 @@ numItemsVisible = 4
 itemHeight = 0.11
 
 
-class Equipment(DirectFrame):
+class GUIEquipment(DirectFrame):
 
     def __init__(self, items, **kw):
         super().__init__(frameColor=(0, 0, 0, 1), frameSize=(-1, 1, -1, 1), **kw)

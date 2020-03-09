@@ -3,7 +3,10 @@ from enum import Enum
 
 class Bind(Enum):
     FWD = 'forward'
-    BWD = 'BACKWARD'
-    RIGHT = 'RIGHT'
-    LEFT = 'LEFT'
-    EQ = "EQUIPMENT"
+    BWD = 'backward'
+    RIGHT = 'right'
+    LEFT = 'left'
+    UP = 'up'
+    DOWN = 'down'
+    EQ = 'equipment'
+    EXIT = 'exit'

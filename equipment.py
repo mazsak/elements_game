@@ -1,5 +1,9 @@
-from direct.gui.DirectLabel import DirectLabel
+from direct.gui.DirectLabel import DirectLabel, DirectFrame, WindowProperties
 from direct.gui.DirectScrolledList import DirectScrolledList
+
+import window
+from gui_equipment import GUIEquipment
+from item.category import CategoryItem
 
 numItemsVisible = 4
 itemHeight = 0.11
@@ -7,28 +11,23 @@ itemHeight = 0.11
 
 class Equipment:
 
-    def __init__(self):
-        l1 = DirectLabel(text="Test1", text_scale=0.1)
-        l2 = DirectLabel(text="Test2", text_scale=0.1)
-        l3 = DirectLabel(text="Test3", text_scale=0.1)
-        myScrolledList = DirectScrolledList(
-            decButton_pos=(0.35, 0, 0.53),
-            decButton_text="Dec",
-            decButton_text_scale=0.04,
-            decButton_borderWidth=(0.005, 0.005),
-            incButton_pos=(0.35, 0, -0.02),
-            incButton_text="Inc",
-            incButton_text_scale=0.04,
-            incButton_borderWidth=(0.005, 0.005),
-            frameSize=(0.0, 0.7, -0.05, 0.59),
-            frameColor=(1, 0, 0, 0.5),
-            pos=(-1, 0, 0),
-            numItemsVisible=numItemsVisible,
-            forceHeight=itemHeight,
-            itemFrame_frameSize=(-0.2, 0.2, -0.37, 0.11),
-            itemFrame_pos=(0.35, 0, 0.4),
-        )
+    def __init__(self, player):
+        self.master = window.Window.get_instance()
+        self.items = {}
+        for category in CategoryItem:
+            self.items[category.name] = []
+        self.gui = GUIEquipment(self.items)
+        self.visible = False
 
-        myScrolledList.addItem(l1)
-        myScrolledList.addItem(l2)
-        myScrolledList.addItem(l3)
+        self.gui.hide()
+
+    def equipment_change_visibility(self):
+        if self.visible:
+            self.gui.hide()
+            self.master.properties()
+            self.visible = False
+        else:
+            self.gui.items = self.items
+            self.gui.show()
+            self.master.properties_with_mouse()
+            self.visible = True

@@ -4,6 +4,8 @@ from panda3d.core import CollisionSphere, CollisionNode, CollisionHandlerQueue, 
     CollisionRay
 
 import window
+from bind import Bind
+from equipment import Equipment
 
 SPEED = 40
 
@@ -14,10 +16,14 @@ class Player(DirectObject):
         super().__init__()
         self.master = window.Window.get_instance()
 
-        self.keyMap = {"w": False, "s": False, "a": False, "d": False, "shift": False, "control": False}
+        self.keyMap = {self.master.bind[Bind.FWD.value]: False, self.master.bind[Bind.BWD.value]: False,
+                       self.master.bind[Bind.RIGHT.value]: False, self.master.bind[Bind.LEFT.value]: False,
+                       self.master.bind[Bind.UP.value]: False, self.master.bind[Bind.DOWN.value]: False}
+        self.equipment = Equipment(self)
+
         self.rotation = [0, 0]
 
-        self.camera_model = self.master.loader.loadModel("models/person/person")
+        self.camera_model = self.master.loader.loadModel("mesh/models/person/person")
         self.camera_model.reparentTo(self.master.render)
         self.camera_model.setPos(0, 15, 200)
 
@@ -77,6 +83,7 @@ class Player(DirectObject):
         self.accept("d", self.set_key, ["d", True])
         self.accept("shift", self.set_key, ["shift", True])
         self.accept("control", self.set_key, ["control", True])
+        self.accept("e", self.equipment.equipment_change_visibility)
 
         self.accept("w-up", self.set_key, ["w", False])
         self.accept("s-up", self.set_key, ["s", False])
@@ -84,4 +91,3 @@ class Player(DirectObject):
         self.accept("d-up", self.set_key, ["d", False])
         self.accept("shift-up", self.set_key, ["shift", False])
         self.accept("control-up", self.set_key, ["control", False])
-

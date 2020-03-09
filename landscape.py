@@ -10,7 +10,7 @@ class Landscape(DirectObject):
         super().__init__()
         self.master = window.Window.get_instance()
 
-        self.model = self.master.loader.loadModel("models/landscape/landscape")
+        self.model = self.master.loader.loadModel("mesh/models/landscape/landscape")
         self.model.reparentTo(self.master.render)
         self.model.setScale(100)
 
