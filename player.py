@@ -1,4 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
+from direct.showbase.ShowBaseGlobal import globalClock
+from panda3d.core import CollisionSphere, CollisionNode, CollisionHandlerQueue, CollisionTraverser
 
 import window
 
@@ -11,7 +13,7 @@ class Player(DirectObject):
         super().__init__()
         self.master = window.Window.get_instance()
 
-        self.keyMap = {"w": False, "s": False, "a": False, "d": False}
+        self.keyMap = {"w": False, "s": False, "a": False, "d": False, "shift": False, "control": False}
         self.rotation = [0, 0]
 
         self.camera_model = self.master.loader.loadModel("models/person/person")
@@ -23,17 +25,31 @@ class Player(DirectObject):
 
         self.bind()
 
-        self.master.taskMgr.add(self.cameraControl, "Camera Control")
+        self.master.taskMgr.add(self.camera_control, "Camera Control")
 
-    def setKey(self, key, value):
+        player_sphere = CollisionSphere(0, 0, 0, 1)
+        cnode_path = self.camera_model.attachNewNode(CollisionNode('cnode'))
+        cnode_path.node().addSolid(player_sphere)
+
+        cnode_path.show()
+
+        traverser = CollisionTraverser('my traverser')
+        self.master.cTrav = traverser
+        self.collision_handler = CollisionHandlerQueue()
+        traverser.addCollider(cnode_path, self.collision_handler)
+        traverser.traverse(self.master.render)
+
+        traverser.showCollisions(self.master.render)
+
+    def set_key(self, key, value):
         self.keyMap[key] = value
 
-    def cameraControl(self, task):
+    def camera_control(self, task):
         dt = globalClock.getDt()
-        if (dt > .20):
+        if dt > .20:
             return task.cont
 
-        if self.master.mouseWatcherNode.hasMouse() == True:
+        if self.master.mouseWatcherNode.hasMouse():
             mouse_position = self.master.mouseWatcherNode.getMouse()
             self.rotation[0] += mouse_position.getY() * 30
             self.rotation[1] += mouse_position.getX() * -50
@@ -44,24 +60,33 @@ class Player(DirectObject):
 
         self.master.win.movePointer(0, int(self.master.win.getXSize() / 2), int(self.master.win.getYSize() / 2))
 
-        if self.keyMap["w"] == True:
+        if self.keyMap["w"]:
             self.camera_model.setY(self.camera_model, SPEED * dt)
-        if self.keyMap["s"] == True:
+        if self.keyMap["s"]:
             self.camera_model.setY(self.camera_model, -SPEED * dt)
-        if self.keyMap["a"] == True:
+        if self.keyMap["a"]:
             self.camera_model.setX(self.camera_model, -SPEED * dt)
-        if self.keyMap["d"] == True:
+        if self.keyMap["d"]:
             self.camera_model.setX(self.camera_model, SPEED * dt)
+        if self.keyMap["shift"]:
+            self.camera_model.setZ(self.camera_model, SPEED * dt)
+        if self.keyMap["control"]:
+            self.camera_model.setZ(self.camera_model, -SPEED * dt)
 
         return task.cont
 
     def bind(self):
-        self.accept("w", self.setKey, ["w", True])
-        self.accept("s", self.setKey, ["s", True])
-        self.accept("a", self.setKey, ["a", True])
-        self.accept("d", self.setKey, ["d", True])
+        self.accept("w", self.set_key, ["w", True])
+        self.accept("s", self.set_key, ["s", True])
+        self.accept("a", self.set_key, ["a", True])
+        self.accept("d", self.set_key, ["d", True])
+        self.accept("shift", self.set_key, ["shift", True])
+        self.accept("control", self.set_key, ["control", True])
 
-        self.accept("w-up", self.setKey, ["w", False])
-        self.accept("s-up", self.setKey, ["s", False])
-        self.accept("a-up", self.setKey, ["a", False])
-        self.accept("d-up", self.setKey, ["d", False])
+        self.accept("w-up", self.set_key, ["w", False])
+        self.accept("s-up", self.set_key, ["s", False])
+        self.accept("a-up", self.set_key, ["a", False])
+        self.accept("d-up", self.set_key, ["d", False])
+        self.accept("shift-up", self.set_key, ["shift", False])
+        self.accept("control-up", self.set_key, ["control", False])
+
