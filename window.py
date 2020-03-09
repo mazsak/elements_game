@@ -1,7 +1,7 @@
 import ctypes
 import sys
 
-from direct.showbase.ShowBase import ShowBase, WindowProperties, CollisionTraverser
+from direct.showbase.ShowBase import ShowBase, WindowProperties, CollisionTraverser, CollisionHandlerFloor
 from direct.task.TaskManagerGlobal import taskMgr
 from panda3d.core import CollisionHandlerQueue
 
@@ -25,8 +25,10 @@ class Window:
             if Window.__instance is None:
                 Window.__instance = self
                 super().__init__()
+                self.setFrameRateMeter(True)
                 self.cTrav = CollisionTraverser()
                 self.collision_handler = CollisionHandlerQueue()
+                self.floor_handler = CollisionHandlerFloor()
                 self.properties()
                 self.skybox = Skybox()
                 self.landscape = Landscape()
@@ -34,9 +36,14 @@ class Window:
                 self.cTrav.addCollider(self.landscape.cnode_path, self.collision_handler)
                 self.cTrav.addCollider(self.player.cnode_path, self.collision_handler)
 
+                self.floor_handler.setMaxVelocity(14)
+                self.floor_handler.addCollider(self.player.cnode_path, self.player.camera_model)
+                self.floor_handler.setOffset(5.0)
+                self.cTrav.addCollider(self.player.cnode_path, self.floor_handler)
+
                 self.accept('escape', sys.exit)
 
-                taskMgr.doMethodLater(.05, self.traverse_task, "tsk_traverse")
+                #taskMgr.doMethodLater(.1, self.traverse_task, "tsk_traverse")
 
         def properties(self):
             props = WindowProperties()

@@ -1,6 +1,7 @@
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.ShowBaseGlobal import globalClock
-from panda3d.core import CollisionSphere, CollisionNode, CollisionHandlerQueue, CollisionTraverser
+from panda3d.core import CollisionSphere, CollisionNode, CollisionHandlerQueue, CollisionTraverser, BitMask32, \
+    CollisionRay
 
 import window
 
@@ -18,7 +19,7 @@ class Player(DirectObject):
 
         self.camera_model = self.master.loader.loadModel("models/person/person")
         self.camera_model.reparentTo(self.master.render)
-        self.camera_model.setPos(0, 15, 100)
+        self.camera_model.setPos(0, 15, 200)
 
         self.master.camera.reparentTo(self.camera_model)
         self.master.camera.setY(self.master.camera, -5)
@@ -27,9 +28,12 @@ class Player(DirectObject):
 
         self.master.taskMgr.add(self.camera_control, "Camera Control")
 
-        player_sphere = CollisionSphere(0, 0, 0, 1)
+        self.camera_model.setCollideMask(BitMask32.allOff())
+        player_sphere = CollisionRay(0, 0, 0, 0, 0, -1)
         self.cnode_path = self.camera_model.attachNewNode(CollisionNode('cnode'))
         self.cnode_path.node().addSolid(player_sphere)
+        self.cnode_path.node().setFromCollideMask(BitMask32.bit(1))
+        self.cnode_path.node().setIntoCollideMask(BitMask32.allOff())
         self.cnode_path.show()
 
     def set_key(self, key, value):

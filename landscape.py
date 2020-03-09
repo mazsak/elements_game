@@ -18,7 +18,7 @@ class Landscape(DirectObject):
 
         self.model.setCollideMask(BitMask32.allOff())
         heart_collider = self.model.find("**/Grid")
-        heart_collider.node().setIntoCollideMask(BitMask32.bit(0))
+        heart_collider.node().setIntoCollideMask(BitMask32.bit(1))
         self.cnode_path = self.model.attachNewNode(CollisionNode('cnode'))
 
         self.deltaTimeAccumulator = 0.0
