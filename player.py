@@ -28,18 +28,9 @@ class Player(DirectObject):
         self.master.taskMgr.add(self.camera_control, "Camera Control")
 
         player_sphere = CollisionSphere(0, 0, 0, 1)
-        cnode_path = self.camera_model.attachNewNode(CollisionNode('cnode'))
-        cnode_path.node().addSolid(player_sphere)
-
-        cnode_path.show()
-
-        traverser = CollisionTraverser('my traverser')
-        self.master.cTrav = traverser
-        self.collision_handler = CollisionHandlerQueue()
-        traverser.addCollider(cnode_path, self.collision_handler)
-        traverser.traverse(self.master.render)
-
-        traverser.showCollisions(self.master.render)
+        self.cnode_path = self.camera_model.attachNewNode(CollisionNode('cnode'))
+        self.cnode_path.node().addSolid(player_sphere)
+        self.cnode_path.show()
 
     def set_key(self, key, value):
         self.keyMap[key] = value
