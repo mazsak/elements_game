@@ -1,16 +1,17 @@
-import ctypes
 import json
 import sys
 
-from direct.showbase.ShowBase import ShowBase, WindowProperties, CollisionTraverser, CollisionHandlerFloor
-from direct.task.TaskManagerGlobal import taskMgr
-from panda3d.core import CollisionHandlerQueue
+from panda3d.core import loadPrcFileData, CollisionHandlerQueue, WindowProperties, CollisionTraverser, \
+    CollisionHandlerFloor
+from direct.showbase.ShowBase import ShowBase
 
 from bind import Bind
 from landscape import Landscape
 from options import Options
 from player import Player
 from skybox import Skybox
+
+loadPrcFileData('', 'window-type none')
 
 
 class Window:
@@ -33,11 +34,11 @@ class Window:
                 self.option = {}
                 self.load_option()
 
-                self.setFrameRateMeter(True)
                 self.cTrav = CollisionTraverser()
                 self.collision_handler = CollisionHandlerQueue()
                 self.floor_handler = CollisionHandlerFloor()
                 self.properties()
+                self.setFrameRateMeter(True)
                 self.skybox = Skybox()
                 self.landscape = Landscape()
                 self.player = Player()
@@ -51,16 +52,25 @@ class Window:
 
                 self.accept(self.bind[Bind.EXIT.value], sys.exit)
 
-                #taskMgr.doMethodLater(.1, self.traverse_task, "tsk_traverse")
+                # taskMgr.doMethodLater(.1, self.traverse_task, "tsk_traverse")
 
         def properties(self):
-            props = WindowProperties()
+            self.makeDefaultPipe()
+            props = WindowProperties().getDefault()
+
+            props.setTitle("Title placeholder")
+
             if self.option[Options.FULL.value]:
-                props.setSize(self.option[Options.RES.value][Options.X.value],self.option[Options.RES.value][Options.Y.value])
+                props.setSize(self.option[Options.RES.value][Options.X.value],
+                              self.option[Options.RES.value][Options.Y.value])
+                props.setFullscreen(True)
+                loadPrcFileData('', 'fullscreen t')
             else:
-                props.setSize(self.option[Options.RES.value][Options.X.value]-100,self.option[Options.RES.value][Options.Y.value]-100)
+                props.setSize(self.option[Options.RES.value][Options.X.value],
+                              self.option[Options.RES.value][Options.Y.value])
             props.setCursorHidden(True)
-            self.win.requestProperties(props)
+
+            self.openMainWindow(props)
 
         def properties_with_mouse(self):
             props = WindowProperties()

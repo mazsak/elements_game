@@ -1,5 +1,5 @@
 from direct.showbase.DirectObject import DirectObject
-from panda3d.core import CollisionNode, BitMask32, CollisionHandlerQueue
+from panda3d.core import CollisionNode, BitMask32
 
 import window
 
