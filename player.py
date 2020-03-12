@@ -25,7 +25,7 @@ class Player(DirectObject):
 
         self.camera_model = self.master.loader.loadModel("mesh/models/person/person")
         self.camera_model.reparentTo(self.master.render)
-        self.camera_model.setPos(0, 15, 200)
+        self.camera_model.setPos(0, 15, 300)
 
         self.master.camera.reparentTo(self.camera_model)
         self.master.camera.setY(self.master.camera, -5)
