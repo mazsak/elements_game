@@ -1,6 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.ShowBaseGlobal import globalClock
-from panda3d.core import CollisionSphere, CollisionNode, CollisionHandlerQueue, CollisionTraverser, BitMask32, \
+from panda3d.core import CollisionNode, BitMask32, \
     CollisionRay
 
 import window
@@ -19,7 +19,7 @@ class Player(DirectObject):
         self.keyMap = {self.master.bind[Bind.FWD.value]: False, self.master.bind[Bind.BWD.value]: False,
                        self.master.bind[Bind.RIGHT.value]: False, self.master.bind[Bind.LEFT.value]: False,
                        self.master.bind[Bind.UP.value]: False, self.master.bind[Bind.DOWN.value]: False}
-        self.equipment = Equipment(self)
+        self.equipment = Equipment()
 
         self.rotation = [0, 0]
 

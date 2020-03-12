@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class CategoryItem(Enum):
-    WEAPON='Weapon'
-    ITEM='Item'
+    WEAPON = 'Weapon'
+    ITEM = 'Item'

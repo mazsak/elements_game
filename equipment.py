@@ -1,6 +1,3 @@
-from direct.gui.DirectLabel import DirectLabel, DirectFrame, WindowProperties
-from direct.gui.DirectScrolledList import DirectScrolledList
-
 import window
 from gui_equipment import GUIEquipment
 from item.category import CategoryItem
@@ -11,11 +8,11 @@ itemHeight = 0.11
 
 class Equipment:
 
-    def __init__(self, player):
+    def __init__(self):
         self.master = window.Window.get_instance()
         self.items = {}
         for category in CategoryItem:
-            self.items[category.name] = []
+            self.items[category.value] = []
         self.gui = GUIEquipment(self.items)
         self.visible = False
 
