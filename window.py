@@ -55,8 +55,10 @@ class Window:
                 # taskMgr.doMethodLater(.1, self.traverse_task, "tsk_traverse")
 
         def properties(self):
-            self.makeDefaultPipe()
-            props = WindowProperties().getDefault()
+            if not self.pipe:
+                self.makeDefaultPipe()
+
+            props = WindowProperties()
 
             props.setTitle("Title placeholder")
 
@@ -68,19 +70,19 @@ class Window:
             else:
                 props.setSize(self.option[Options.RES.value][Options.X.value],
                               self.option[Options.RES.value][Options.Y.value])
+
             props.setCursorHidden(True)
+            props.setDefault(props)
 
             self.openMainWindow(props)
 
-        def properties_with_mouse(self):
-            props = WindowProperties()
-            if self.option[Options.FULL.value]:
-                props.setSize(self.option[Options.RES.value][Options.X.value],
-                              self.option[Options.RES.value][Options.Y.value])
+        def change_mouse_visibility(self):
+            props = WindowProperties().getDefault()
+            if props.getCursorHidden():
+                props.setCursorHidden(False)
             else:
-                props.setSize(self.option[Options.RES.value][Options.X.value] - 100,
-                              self.option[Options.RES.value][Options.Y.value] - 100)
-            props.setCursorHidden(False)
+                props.setCursorHidden(True)
+            props.setDefault(props)
             self.win.requestProperties(props)
 
         def traverse_task(self, task=None):
