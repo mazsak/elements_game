@@ -5,6 +5,8 @@
   "left": "a",
   "up": "shift",
   "down": "control",
+  "space": "space",
   "equipment": "e",
+  "debug": "f1",
   "exit": "escape"
 }

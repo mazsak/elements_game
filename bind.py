@@ -8,5 +8,7 @@ class Bind(Enum):
     LEFT = 'left'
     UP = 'up'
     DOWN = 'down'
+    SPACE = 'space'
     EQ = 'equipment'
+    DEBUG = 'debug'
     EXIT = 'exit'
